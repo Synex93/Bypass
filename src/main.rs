@@ -5,6 +5,8 @@ use tower_http::trace::TraceLayer;
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 
+use Bypass::database;
+
 fn parse_log_level() -> Level {
     let level = env::var("log_level")
         .ok()
@@ -39,11 +41,12 @@ async fn main() -> anyhow::Result<()> {
         // 日志中间件
         .layer(TraceLayer::new_for_http());
 
-    let listener = TcpListener::bind(env::var("listener")?).await.unwrap();
+    // database init
+    database::init_pool().await?;
+    let listener = TcpListener::bind(env::var("listener")?).await?;
 
-    tracing::info!("server started at {}", env::var("listener").unwrap());
-
-    axum::serve(listener, app).await.unwrap();
+    tracing::info!("server started at {}", env::var("listener")?);
+    axum::serve(listener, app).await?;
 
     Ok(())
 }
