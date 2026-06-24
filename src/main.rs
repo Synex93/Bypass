@@ -1,11 +1,9 @@
-use axum::{Router, routing::get};
 use std::env;
 use tokio::net::TcpListener;
-use tower_http::trace::TraceLayer;
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 
-use Bypass::database;
+use Bypass::{database, router::router};
 
 fn parse_log_level() -> Level {
     let level = env::var("log_level")
@@ -35,18 +33,12 @@ async fn main() -> anyhow::Result<()> {
 
     tracing::subscriber::set_global_default(subscriber)?;
 
-    // auxm init
-    let app = Router::new()
-        .route("/", get(|| async { "Hello,Bypass" }))
-        // 日志中间件
-        .layer(TraceLayer::new_for_http());
-
     // database init
     database::init_pool().await?;
     let listener = TcpListener::bind(env::var("listener")?).await?;
 
     tracing::info!("server started at {}", env::var("listener")?);
-    axum::serve(listener, app).await?;
+    axum::serve(listener, router::get()).await?;
 
     Ok(())
 }

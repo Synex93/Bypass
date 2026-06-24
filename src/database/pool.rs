@@ -22,8 +22,6 @@ pub async fn init_pool() -> anyhow::Result<()> {
     Ok(())
 }
 
-pub fn get_pool() -> anyhow::Result<&'static PgPool> {
-    DB_POOL
-        .get()
-        .ok_or_else(|| anyhow::anyhow!("database pool not initialized"))
+pub fn get_pool() -> Result<&'static PgPool, sqlx::Error> {
+    DB_POOL.get().ok_or_else(|| sqlx::Error::PoolClosed)
 }
