@@ -28,7 +28,11 @@ impl From<sqlx::Error> for AppError {
         AppError::Internal(error.into())
     }
 }
-
+impl From<argon2::password_hash::Error> for AppError {
+    fn from(error: argon2::password_hash::Error) -> Self {
+        AppError::Internal(anyhow::anyhow!("password hash failed: {}", error))
+    }
+}
 #[derive(Debug, Serialize)]
 struct ErrorResponse {
     error: ErrorBody,

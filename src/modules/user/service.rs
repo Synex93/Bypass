@@ -1,16 +1,25 @@
+use super::repo;
 use crate::{
     error::AppError,
-    modules::user::dto::{RegisterReq, RegisterResp},
+    modules::user::dto::{CheckEmailReq, CheckEmailResp, RegisterReq, RegisterResp},
+    utils::password_helper as helper,
 };
-
-use super::repo;
+// use bypass::utils::password_helper as helper;
 
 // create user
 pub async fn create(req: RegisterReq) -> Result<RegisterResp, AppError> {
-    let user = repo::create(req.name.as_str(), req.email.as_str(), req.password.as_str()).await?;
+    let pass = helper::hash_password(&req.password)?;
+    let user = repo::create(&req.name, &req.email, &pass).await?;
     Ok(RegisterResp {
         id: user.id,
         name: user.name,
         email: user.email,
+    })
+}
+
+// check email
+pub async fn check_email(req: CheckEmailReq) -> Result<CheckEmailResp, AppError> {
+    Ok(CheckEmailResp {
+        is_exist: repo::exists_by_email(&req.email).await?,
     })
 }

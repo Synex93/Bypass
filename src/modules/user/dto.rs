@@ -19,3 +19,14 @@ pub struct RegisterResp {
     pub name: String,
     pub email: String,
 }
+
+#[derive(Debug, Deserialize, Validate)]
+pub struct CheckEmailReq {
+    #[validate(email(message = "invalid email"))]
+    pub email: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct CheckEmailResp {
+    pub is_exist: bool,
+}

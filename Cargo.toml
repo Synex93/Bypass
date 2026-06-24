@@ -1,10 +1,12 @@
 [package]
-name = "Bypass"
+name = "bypass"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 anyhow = "1.0.102"
+argon2 = { version = "0.5.3", features = ["std"] }
+rand_core = { version = "0.6", features = ["getrandom"] }
 axum = "0.8.9"
 chrono = "0.4.45"
 dotenvy = "0.15.7"

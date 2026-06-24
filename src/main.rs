@@ -3,7 +3,7 @@ use tokio::net::TcpListener;
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 
-use Bypass::{database, router::router};
+use bypass::{database, router::router};
 
 fn parse_log_level() -> Level {
     let level = env::var("log_level")
