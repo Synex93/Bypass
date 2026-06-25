@@ -26,5 +26,5 @@ pub async fn check_email(
     req.validate()
         .map_err(|err| AppError::BadRequest(err.to_string()))?;
 
-    Ok((StatusCode::CREATED, Json(service::check_email(req).await?)))
+    Ok((StatusCode::OK, Json(service::check_email(req).await?)))
 }

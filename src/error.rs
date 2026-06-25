@@ -28,11 +28,20 @@ impl From<sqlx::Error> for AppError {
         AppError::Internal(error.into())
     }
 }
+
+// password
 impl From<argon2::password_hash::Error> for AppError {
     fn from(error: argon2::password_hash::Error) -> Self {
         AppError::Internal(anyhow::anyhow!("password hash failed: {}", error))
     }
 }
+// jwt
+impl From<jsonwebtoken::errors::Error> for AppError {
+    fn from(error: jsonwebtoken::errors::Error) -> Self {
+        AppError::Internal(error.into())
+    }
+}
+
 #[derive(Debug, Serialize)]
 struct ErrorResponse {
     error: ErrorBody,

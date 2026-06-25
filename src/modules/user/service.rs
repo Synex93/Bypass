@@ -4,7 +4,6 @@ use crate::{
     modules::user::dto::{CheckEmailReq, CheckEmailResp, RegisterReq, RegisterResp},
     utils::password_helper as helper,
 };
-// use bypass::utils::password_helper as helper;
 
 // create user
 pub async fn create(req: RegisterReq) -> Result<RegisterResp, AppError> {
