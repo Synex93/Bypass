@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                INSERT INTO builder_versions (language, version)\n                VALUES ($1, $2)\n                ON CONFLICT (language, version)\n                DO NOTHING\n                ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e19dfc94b44ee4cf0ff77397422ef57ae2d17f070ed36a8c29746c6df1954a51"
+}

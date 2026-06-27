@@ -11,7 +11,7 @@ use crate::error::AppError;
 static JWT_SECRET: OnceLock<String> = OnceLock::new();
 
 fn get_jwt_secret() -> &'static str {
-    JWT_SECRET.get_or_init(|| env::var("secret").expect("jwt secret must be set"))
+    JWT_SECRET.get_or_init(|| env::var("jwt_secret").expect("jwt secret must be set"))
 }
 
 // Define the claims structure

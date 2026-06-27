@@ -3,7 +3,7 @@ use tokio::net::TcpListener;
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 
-use bypass::{database, router::router};
+use bypass::{builders::environment, database, router::router};
 
 fn parse_log_level() -> Level {
     let level = env::var("log_level")
@@ -35,8 +35,11 @@ async fn main() -> anyhow::Result<()> {
 
     // database init
     database::init_pool().await?;
-    let listener = TcpListener::bind(env::var("listener")?).await?;
 
+    // builder env check
+    let _ = environment::ensure_builder().await?;
+
+    let listener = TcpListener::bind(env::var("listener")?).await?;
     tracing::info!("server started at {}", env::var("listener")?);
     axum::serve(listener, router::get()).await?;
 
